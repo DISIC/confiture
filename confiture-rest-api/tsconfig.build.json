@@ -6,6 +6,6 @@
     "dist",
     "**/*spec.ts",
     "scripts",
-    "date-poll-api.ts"
+    "confiture-api.ts"
   ]
 }
