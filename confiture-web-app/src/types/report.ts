@@ -1,51 +1,8 @@
-import { AuditFile, AuditType, CriteriumResult } from "../types";
+import { CriteriumResult } from "../types";
+import { paths } from "./confiture-api";
 
-export interface AuditReport {
-  consultUniqueId: string;
-
-  contactEmail?: string;
-  contactFormUrl?: string;
-
-  procedureInitiator?: string;
-  procedureName: string;
-  procedureUrl?: string;
-
-  creationDate?: string;
-  publishDate?: string;
-  updateDate?: string;
-
-  notCompliantContent?: string;
-  derogatedContent?: string;
-  notInScopeContent?: string;
-  notes?: string;
-  notesFiles: AuditFile[];
-
-  auditType: AuditType;
-
-  context: AuditReportContext;
-
-  accessibilityRate: number;
-
-  criteriaCount: {
-    total: number;
-    compliant: number;
-    notCompliant: number;
-    blocking: number;
-    applicable: number;
-    notApplicable: number;
-  };
-
-  /** Global distribution of criteria by result */
-  resultDistribution: ResultDistribution;
-
-  /** Distribution of criteria by page */
-  pageDistributions: PageResultDistribution[];
-
-  /** Distribution of criteria by topic */
-  topicDistributions: TopicResultDistribution[];
-
-  results: Array<ReportCriteriumResult>;
-}
+export type AuditReport =
+  paths["/reports/{consultUniqueId}"]["get"]["responses"]["200"]["content"]["application/json"];
 
 export type ReportCriteriumResult = Omit<CriteriumResult, "exampleImages"> & {
   exampleImages: {
@@ -54,57 +11,3 @@ export type ReportCriteriumResult = Omit<CriteriumResult, "exampleImages"> & {
     filename: string;
   }[];
 };
-
-interface ResultDistribution {
-  compliant: {
-    raw: number;
-    percentage: number;
-  };
-  notCompliant: {
-    raw: number;
-    percentage: number;
-  };
-  notApplicable: {
-    raw: number;
-    percentage: number;
-  };
-}
-
-interface PageResultDistribution extends ResultDistribution {
-  name: string;
-}
-
-interface TopicResultDistribution extends ResultDistribution {
-  name: string;
-}
-
-interface AuditReportContext {
-  referencial: string;
-
-  auditorName: string;
-  auditorEmail: string | null;
-  auditorOrganisation: string;
-
-  technologies: string[];
-
-  samples: PageSample[];
-
-  tools: string[];
-
-  environments: Environment[];
-}
-
-interface PageSample {
-  // number: number;
-  id: number;
-  order: number;
-  name: string;
-  url: string;
-}
-
-interface Environment {
-  platform: string;
-  operatingSystem: string;
-  assistiveTechnology: string;
-  browser: string;
-}

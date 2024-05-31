@@ -25,6 +25,8 @@ export enum AuditType {
   FULL = "FULL"
 }
 
+export type AuditTypeString = `${AuditType}`;
+
 export enum AuditStatus {
   NOT_STARTED = "NOT_STARTED",
   IN_PROGRESS = "IN_PROGRESS",
