@@ -13,7 +13,9 @@ import { UserMiddleware } from "./auth/user.middleware";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: configValidationSchema
+      validationSchema: !process.env.GENERATE_TYPES
+        ? configValidationSchema
+        : undefined
     }),
     FeedbackModule,
     AuditsModule,

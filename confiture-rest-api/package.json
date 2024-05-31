@@ -13,7 +13,7 @@
     "migrate:dev": "prisma migrate dev",
     "migrate:prod": "prisma migrate deploy",
     "postinstall": "prisma generate && yarn generate-api-types",
-    "generate-api-types": "rimraf dist && nest start --entryFile generate-api-typings.js"
+    "generate-api-types": "rimraf dist && GENERATE_TYPES=1 nest start --entryFile generate-api-typings.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.218.0",
