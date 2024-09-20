@@ -240,10 +240,12 @@ export const useAuditStore = defineStore("audit", {
   },
   getters: {
     currentAudit(state) {
-      if (!state.currentAuditId) {
+      if (!state.currentAuditId || !state.entities[state.currentAuditId]) {
         return null;
       }
-      return state.entities[state.currentAuditId];
+      const stringified = JSON.stringify(state.entities[state.currentAuditId]);
+      const parsed = JSON.parse(stringified);
+      return parsed;
     },
 
     isLoading(): boolean {
