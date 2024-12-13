@@ -2,7 +2,11 @@
 import { computed, ref } from "vue";
 
 import { useReportStore } from "../../store";
-import { CriterionResultUserImpact, CriteriumResultStatus } from "../../types";
+import {
+  CriterionResultUserImpact,
+  CriteriumResultStatus,
+  ReportUserImpact
+} from "../../types";
 import { getReportErrors } from "./getReportErrors";
 import ReportCriteria from "./ReportCriteria.vue";
 import ReportErrorCriterium from "./ReportErrorCriterium.vue";
@@ -17,9 +21,9 @@ const defaultUserImpactFillters = [
   null
 ];
 
-const userImpactFilters = ref<
-  Array<CriterionResultUserImpact | `${CriterionResultUserImpact}` | null>
->(defaultUserImpactFillters);
+const userImpactFilters = ref<Array<ReportUserImpact>>(
+  defaultUserImpactFillters
+);
 
 const disabledResetFilters = computed(
   () =>

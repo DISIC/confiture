@@ -1,3 +1,5 @@
+import { components } from "./confiture-api";
+
 export interface AuditRecipent {
   id: number;
   name: string;
@@ -109,14 +111,9 @@ export enum CriterionResultUserImpact {
   BLOCKING = "BLOCKING"
 }
 
-export interface AuditFile {
-  id: number;
-  originalFilename: string;
-  size: number;
-  key: string;
-  mimetype: string;
-  thumbnailKey: string;
-}
+export type AuditFile = components["schemas"]["AuditFile"];
+
+export type NotesFile = components["schemas"]["NotesFile"];
 
 export interface CriteriumResult {
   // ID
