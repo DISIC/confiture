@@ -1,11 +1,5 @@
 import { components } from "./confiture-api";
 
-export interface AuditRecipent {
-  id: number;
-  name: string;
-  email: string;
-}
-
 export interface AuditEnvironment {
   id: number;
   platform: string;
@@ -85,18 +79,6 @@ export type UpdateAuditRequestData = Omit<Audit, "environments" | "pages"> & {
   environments: Omit<AuditEnvironment, "id">[];
   pages: Omit<AuditPage, "id" | "order">[];
 };
-
-export interface CreateFeedbackRequestData {
-  easyToUse: string;
-  easyToUnderstand: string;
-
-  feedback: string;
-  suggestions: string;
-
-  name?: string;
-  email?: string;
-  occupations?: string[];
-}
 
 export enum CriteriumResultStatus {
   NOT_TESTED = "NOT_TESTED",
