@@ -189,7 +189,9 @@ model StoredFile {
   key          String
   thumbnailKey String
 
+  /// @DtoEntityHidden
   criterionResult   CriterionResult? @relation(fields: [criterionResultId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  /// @DtoEntityHidden
   criterionResultId Int?
 }
 

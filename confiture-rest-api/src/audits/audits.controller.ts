@@ -40,6 +40,7 @@ import { AuthRequired } from "src/auth/auth-required.decorator";
 import { User } from "src/auth/user.decorator";
 import { AuthenticationJwtPayload } from "src/auth/jwt-payloads";
 import { AuditListingItemDto } from "./dto/audit-listing-item.dto";
+import { StoredFile } from "src/generated/nestjs-dto/storedFile.entity";
 
 @Controller("audits")
 @ApiTags("Audits")
@@ -148,6 +149,7 @@ export class AuditsController {
 
   @Post("/:uniqueId/results/examples")
   @UseInterceptors(FileInterceptor("image"))
+  @ApiCreatedResponse({ type: StoredFile })
   async uploadExampleImage(
     @Param("uniqueId") uniqueId: string,
     @UploadedFile(
