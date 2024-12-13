@@ -120,7 +120,7 @@ export const useResultsStore = defineStore("results", {
     everyCriteriumAreTested(): boolean {
       const auditStore = useAuditStore();
       const transversePageId =
-        auditStore.currentAudit?.transverseElementsPage.id;
+        auditStore.currentAudit?.transverseElementsPage!.id;
 
       return !(
         this.allResults
@@ -159,7 +159,7 @@ export const useResultsStore = defineStore("results", {
 
       const auditStore = useAuditStore();
       const transversePageId =
-        auditStore.currentAudit?.transverseElementsPage.id;
+        auditStore.currentAudit?.transverseElementsPage!.id;
 
       const r = Object.values(this.data)
         .flatMap(Object.values)

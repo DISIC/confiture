@@ -39,6 +39,7 @@ import { UploadImageDto } from "./dto/upload-image.dto";
 import { AuthRequired } from "src/auth/auth-required.decorator";
 import { User } from "src/auth/user.decorator";
 import { AuthenticationJwtPayload } from "src/auth/jwt-payloads";
+import { AuditListingItemDto } from "./dto/audit-listing-item.dto";
 
 @Controller("audits")
 @ApiTags("Audits")
@@ -76,6 +77,7 @@ export class AuditsController {
    */
   @Get()
   @AuthRequired()
+  @ApiOkResponse({ type: AuditListingItemDto, isArray: true })
   async getAuditList(@User() user: AuthenticationJwtPayload) {
     return this.auditService.getAuditsByAuditorEmail(user.email);
   }

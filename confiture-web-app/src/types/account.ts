@@ -1,34 +1,9 @@
-import { AuditStatus, AuditType } from "./types";
+import { components, paths } from "./confiture-api";
 
-export interface Account {
-  id: string;
-  email: string;
-  name?: string;
-  orgName?: string;
-}
+export type UpdateProfileRequestData =
+  paths["/profile"]["patch"]["requestBody"]["content"]["application/json"];
 
-export interface UpdateProfileRequestData {
-  /** John Doe */
-  name: string | null;
-  /** ACME */
-  orgName?: string | null;
-}
+export type AccountDeletionResponse =
+  paths["/auth/account"]["delete"]["responses"]["200"]["content"]["application/json"];
 
-export interface AccountDeletionResponse {
-  feedbackToken: string;
-}
-
-export interface AccountAudit {
-  procedureName: string;
-  status:
-    | AuditStatus.NOT_STARTED
-    | AuditStatus.IN_PROGRESS
-    | AuditStatus.COMPLETED;
-  creationDate: string;
-  auditType: AuditType;
-  complianceLevel: number;
-  editUniqueId: string;
-  consultUniqueId: string;
-  estimatedCsvSize: number;
-  statementIsPublished: boolean;
-}
+export type AccountAudit = components["schemas"]["AuditListingItemDto"];

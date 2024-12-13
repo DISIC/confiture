@@ -20,6 +20,7 @@ import { FileStorageService } from "./file-storage.service";
 import { UpdateAuditDto } from "./dto/update-audit.dto";
 import { UpdateResultsDto } from "./dto/update-results.dto";
 import { PatchAuditDto } from "./dto/patch-audit.dto";
+import { AuditListingItemDto } from "./dto/audit-listing-item.dto";
 
 const AUDIT_EDIT_INCLUDE = {
   recipients: true,
@@ -1287,7 +1288,7 @@ export class AuditService {
     });
   }
 
-  async getAuditsByAuditorEmail(email: string) {
+  async getAuditsByAuditorEmail(email: string): Promise<AuditListingItemDto[]> {
     const audits = await this.prisma.audit.findMany({
       where: {
         auditorEmail: email,
@@ -1314,7 +1315,7 @@ export class AuditService {
       }
     });
 
-    const unorderedAudits = audits.map((a) => {
+    const unorderedAudits: AuditListingItemDto[] = audits.map((a) => {
       const allResults = [
         ...a.transverseElementsPage.results,
         ...a.pages.flatMap((p) => p.results)
