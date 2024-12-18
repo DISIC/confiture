@@ -15,7 +15,13 @@ defineProps<{
 
 <template>
   <div>
-    <h2 class="fr-text--lg fr-text--regular fr-mb-2w sub-heading">
+    <h2
+      class="fr-badge fr-mb-2w audit-status"
+      :class="{
+        'fr-badge--green-emeraude': status === AuditStatus.COMPLETED,
+        'fr-badge--purple-glycine': status === AuditStatus.IN_PROGRESS
+      }"
+    >
       {{
         status === AuditStatus.IN_PROGRESS
           ? `En cours (${audits.length})`
