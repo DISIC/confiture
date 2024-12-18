@@ -167,17 +167,6 @@ function copyStatementLink(uniqueId: string) {
       <strong>{{ audit.procedureName }}</strong>
     </RouterLink>
 
-    <!-- Status -->
-    <p
-      class="fr-badge fr-badge--sm audit-status"
-      :class="{
-        'fr-badge--purple-glycine': isInProgress || isNotStarted
-      }"
-    >
-      <span class="fr-sr-only">Statut </span
-      >{{ isInProgress || isNotStarted ? "En cours" : "Terminé" }}
-    </p>
-
     <!-- Creation date -->
     <p class="fr-mb-0 audit-date">
       <span class="fr-sr-only">Date de création </span>
@@ -447,7 +436,7 @@ function copyStatementLink(uniqueId: string) {
 <style scoped>
 .grid {
   display: grid;
-  grid-template-columns: 2fr 0.75fr 0.75fr 0.75fr 1.25fr 1.5fr 1fr;
+  grid-template-columns: 2fr 0.75fr 0.75fr 1.25fr 1.5fr 1fr;
   grid-gap: 1rem;
   align-items: center;
   border: 1px solid var(--border-default-grey);
