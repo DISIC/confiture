@@ -43,7 +43,11 @@ defineProps<{
           Type d’audit
         </p>
         <p aria-hidden="true" class="fr-text--sm fr-text--bold fr-mb-0">
-          Taux de conformité
+          {{
+            status === AuditStatus.COMPLETED
+              ? "Taux de conformité"
+              : "Progression de l’audit"
+          }}
         </p>
       </div>
 

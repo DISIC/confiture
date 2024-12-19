@@ -183,10 +183,7 @@ function copyStatementLink(uniqueId: string) {
     </p>
 
     <!-- Compliance level / Progression level -->
-    <div
-      v-if="audit.status === AuditStatus.COMPLETED"
-      class="audit-compliance-level"
-    >
+    <div v-if="audit.status === AuditStatus.COMPLETED" class="fr-mr-4w">
       <template v-if="audit.auditType === AuditType.FULL">
         <p
           class="fr-badge fr-badge--sm fr-badge--no-icon fr-mb-0"
@@ -243,6 +240,7 @@ function copyStatementLink(uniqueId: string) {
 
     <AuditProgressBar
       v-else
+      class="fr-mr-4w"
       label="Progression de l’audit"
       :value="0.83"
       :size="8"
