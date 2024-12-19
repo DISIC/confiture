@@ -119,7 +119,7 @@ function toggleTransverseComment() {
 
 const notify = useNotifications();
 
-const errorMessage: Ref<FileErrorMessage | null> = ref(null);
+const errorMessage: Ref<FileErrorMessage | string | null> = ref(null);
 const criteriumNotCompliantAccordion =
   ref<InstanceType<typeof CriteriumNotCompliantAccordion>>();
 

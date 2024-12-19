@@ -2,6 +2,7 @@ import "./styles/main.css";
 import "@gouvfr/dsfr/dist/dsfr.min.css";
 import "@gouvfr/dsfr/dist/dsfr.module.min.js";
 import "@gouvfr/dsfr/dist/utility/icons/icons.css";
+import "highlight.js/styles/github.css";
 
 import { BrowserTracing } from "@sentry/tracing";
 import * as Sentry from "@sentry/vue";

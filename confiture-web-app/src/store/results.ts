@@ -6,7 +6,8 @@ import {
   AuditFile,
   CriterionResultUserImpact,
   CriteriumResult,
-  CriteriumResultStatus
+  CriteriumResultStatus,
+  FileDisplay
 } from "../types";
 import { useAuditStore } from "./audit";
 import { useFiltersStore } from "./filters";
@@ -343,7 +344,8 @@ export const useResultsStore = defineStore("results", {
       pageId: number,
       topic: number,
       criterium: number,
-      file: File
+      file: File,
+      display?: FileDisplay
     ) {
       const formData = new FormData();
       formData.set("pageId", pageId.toString());
@@ -351,6 +353,9 @@ export const useResultsStore = defineStore("results", {
       formData.set("criterium", criterium.toString());
       // To handle non-ascii characters, we encode the filename here and decode it on the back
       formData.set("image", file, encodeURI(file.name));
+      if (display) {
+        formData.set("display", display.toString());
+      }
 
       this.increaseCurrentRequestCount();
 

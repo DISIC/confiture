@@ -114,6 +114,12 @@ export interface AuditFile {
   key: string;
   mimetype: string;
   thumbnailKey: string;
+  display: FileDisplay;
+}
+
+export enum FileDisplay {
+  ATTACHMENT = "ATTACHMENT",
+  EDITOR = "EDITOR"
 }
 
 export interface CriteriumResult {

@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    // Frontend (Chrome)
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "FRONT (Vue.js) – Chrome",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/confiture-web-app/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      }
+    },
+    // Frontend (Chrome)
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "FRONT (Vue.js) – Firefox",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/confiture-web-app/src",
+      "pathMappings": [
+        { "url": "webpack:///confiture-web-app/src/", "path": "${webRoot}/" }
+      ]
+    },
+    // Backend (REST API)
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "BACKEND (nest)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:debug", "--", "--inspect-brk"],
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "sourceMaps": true,
+      "stopOnEntry": false,
+      "console": "integratedTerminal"
+    }
+  ]
+}

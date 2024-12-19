@@ -6,10 +6,11 @@ import { useRoute } from "vue-router";
 import { useIsOffline } from "../../composables/useIsOffline";
 import { FileErrorMessage } from "../../enums";
 import { useAuditStore } from "../../store/audit";
-import { AuditFile, StoreName } from "../../types";
+import { AuditFile, FileDisplay, StoreName } from "../../types";
 import { handleFileDeleteError, handleFileUploadError } from "../../utils";
 import DsfrModal from "../ui/DsfrModal.vue";
 import FileUpload from "../ui/FileUpload.vue";
+import Tiptap from "../ui/Tiptap.vue";
 import MarkdownHelpButton from "./MarkdownHelpButton.vue";
 import SaveIndicator from "./SaveIndicator.vue";
 
@@ -27,7 +28,7 @@ defineExpose({
   hide: () => modal.value?.hide()
 });
 
-const errorMessage: Ref<FileErrorMessage | null> = ref(null);
+const errorMessage: Ref<FileErrorMessage | string | null> = ref(null);
 const fileUpload = ref<InstanceType<typeof FileUpload>>();
 
 const auditStore = useAuditStore();
@@ -39,9 +40,17 @@ const isOffline = useIsOffline();
 const notes = ref(auditStore.currentAudit?.notes || "");
 
 const uniqueId = computed(() => route.params.uniqueId as string);
-const files = computed(() => auditStore.currentAudit?.notesFiles || []);
+const files = computed(
+  () =>
+    auditStore.currentAudit?.notesFiles?.filter(
+      (e) => e.display === FileDisplay.ATTACHMENT
+    ) || []
+);
 
-const handleNotesChange = debounce(() => emit("confirm", notes.value), 500);
+const handleNotesChange = debounce((notesContent: string) => {
+  notes.value = notesContent;
+  emit("confirm", notes.value);
+}, 500);
 
 function handleUploadFile(file: File) {
   auditStore
@@ -101,18 +110,15 @@ function handleDeleteFile(file: AuditFile) {
                 </div>
               </div>
               <div class="fr-input-group fr-mb-1v">
-                <label class="fr-label" for="audit-notes">
+                <label id="audit-notes-label" class="fr-label">
                   Remarques et recommandations générales
                 </label>
-                <textarea
-                  id="audit-notes"
-                  v-model="notes"
-                  class="fr-input"
-                  rows="10"
+                <tiptap
+                  :content="notes"
+                  labelled-by="audit-notes-label"
                   :disabled="isOffline"
-                  aria-describedby="notes-markdown"
-                  @input="handleNotesChange"
-                ></textarea>
+                  @update:content="handleNotesChange"
+                />
               </div>
               <MarkdownHelpButton
                 :id="`markdown-notice-notes`"
@@ -148,8 +154,8 @@ function handleDeleteFile(file: AuditFile) {
   flex-wrap: wrap;
   column-gap: 1rem;
   align-items: center;
-  margin: 2rem 0 1.5rem 0;
-  padding: 0.75rem 0;
+  margin: 0 -3rem 1.5rem -3rem;
+  padding: 2rem 3rem 0.75rem;
   position: sticky;
   top: 0;
   z-index: 9;
@@ -165,8 +171,8 @@ function handleDeleteFile(file: AuditFile) {
   flex-grow: 1;
 }
 
-textarea {
-  resize: vertical;
+label {
+  margin-bottom: 1rem;
 }
 
 @media (min-width: 36em) {

@@ -1,6 +1,6 @@
 import { captureException, Scope } from "@sentry/vue";
 import jwtDecode from "jwt-decode";
-import { HTTPError } from "ky";
+import { HTTPError, TimeoutError } from "ky";
 import { noop } from "lodash-es";
 import baseSlugify from "slugify";
 
@@ -243,41 +243,52 @@ export function getUploadUrl(key: string): string {
 
 export async function handleFileUploadError(
   error: Error
-): Promise<FileErrorMessage | null> {
-  let errorType: FileErrorMessage | null = null;
-  if (!(error instanceof HTTPError)) {
-    return null;
-  }
-  if (error.response.status === 413) {
-    errorType = FileErrorMessage.UPLOAD_SIZE;
-  }
-
-  // Unprocessable Entity
-  if (error.response.status === 422) {
-    const body = await error.response.json();
-
-    if (body.message.includes("expected type")) {
-      errorType = FileErrorMessage.UPLOAD_FORMAT;
-    } else if (body.message.includes("expected size")) {
+): Promise<FileErrorMessage | string> {
+  if (error instanceof HTTPError) {
+    let errorType: FileErrorMessage;
+    if (error.response.status === 413) {
       errorType = FileErrorMessage.UPLOAD_SIZE;
+    }
+
+    // Unprocessable Entity
+    /* UPLOAD_FORMAT should never happen… */
+    if (error.response.status === 422) {
+      const body = await error.response.json();
+
+      if (body.message.includes("expected type")) {
+        errorType = FileErrorMessage.UPLOAD_FORMAT;
+      } else if (body.message.includes("expected size")) {
+        errorType = FileErrorMessage.UPLOAD_SIZE;
+      } else {
+        errorType = FileErrorMessage.UPLOAD_UNKNOWN;
+        captureWithPayloads(error);
+      }
     } else {
       errorType = FileErrorMessage.UPLOAD_UNKNOWN;
       captureWithPayloads(error);
     }
-  } else {
-    errorType = FileErrorMessage.UPLOAD_UNKNOWN;
-    captureWithPayloads(error);
+
+    return errorType;
   }
 
-  return errorType;
+  if (error instanceof TimeoutError) {
+    return FileErrorMessage.UPLOAD_TIMEOUT;
+  }
+
+  console.warn(error);
+  return error.message;
 }
 
 export async function handleFileDeleteError(
   error: Error
-): Promise<FileErrorMessage | null> {
-  if (!(error instanceof HTTPError)) {
-    return null;
+): Promise<FileErrorMessage | string> {
+  if (error instanceof HTTPError) {
+    return FileErrorMessage.DELETE_UNKNOWN;
+  }
+  if (error instanceof TimeoutError) {
+    return FileErrorMessage.DELETE_TIMEOUT;
   }
 
-  return FileErrorMessage.DELETE_UNKNOWN;
+  console.warn(error);
+  return error.message;
 }

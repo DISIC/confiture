@@ -2,7 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import {
   AuditType,
   CriterionResultStatus,
-  CriterionResultUserImpact
+  CriterionResultUserImpact,
+  FileDisplay
 } from "@prisma/client";
 
 export class AuditReportDto {
@@ -190,18 +191,27 @@ class ReportCriterionResult {
 }
 
 class ExampleImage {
-  /** @example "mon-image.jpg" */
+  /** @example "my-image.jpg" */
   filename: string;
-  /** @example "audit/xxxx/my-image.jpg" */
+  /** @example "audit/EWIsM6sYI2cC0lI7Ok2PE/3gnCTQ5ztOdEnKRraIMYG/my-image.jpg" */
   key: string;
-  /** @example "audit/xxxx/my-image_thumbnail.jpg" */
+  /** @example "audit/EWIsM6sYI2cC0lI7Ok2PE/3gnCTQ5ztOdEnKRraIMYG/my-image_thumbnail.jpg" */
   thumbnailKey: string;
+  /** @example "ATTACHMENT" */
+  display: FileDisplay;
 }
 
 class NotesFile {
+  /** @example "screenshot_001.png" */
   originalFilename: string;
+  /** @example "audits/EWIsM6sYI2cC0lI7Ok2PE/uqoOes4QqhFyKV8v0s2AQ/screenshot_001.png" */
   key: string;
+  /** @example "audits/EWIsM6sYI2cC0lI7Ok2PE/uqoOes4QqhFyKV8v0s2AQ/thumbnail_screenshot_001.png" */
   thumbnailKey: string;
+  /** @example 4631 */
   size: number;
+  /** @example "image/png" */
   mimetype: string;
+  /** @example "ATTACHMENT" */
+  display: FileDisplay;
 }

@@ -6,6 +6,7 @@ import {
   Audit,
   AuditFile,
   CreateAuditRequestData,
+  FileDisplay,
   UpdateAuditRequestData
 } from "../types";
 import { AccountAudit } from "../types/account";
@@ -134,10 +135,17 @@ export const useAuditStore = defineStore("audit", {
       }
     },
 
-    async uploadAuditFile(uniqueId: string, file: File) {
+    async uploadAuditFile(
+      uniqueId: string,
+      file: File,
+      display?: FileDisplay
+    ): Promise<AuditFile> {
       const formData = new FormData();
       // To handle non-ascii characters, we encode the filename here and decode it on the back
       formData.set("file", file, encodeURI(file.name));
+      if (display) {
+        formData.set("display", display.toString());
+      }
 
       this.increaseCurrentRequestCount();
       const notesFile = (await ky
@@ -151,6 +159,7 @@ export const useAuditStore = defineStore("audit", {
 
       const notesFiles = this.entities[uniqueId].notesFiles || [];
       notesFiles.push(notesFile);
+      return notesFile;
     },
 
     async deleteAuditFile(uniqueId: string, fileId: number) {

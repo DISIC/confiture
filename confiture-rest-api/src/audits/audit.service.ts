@@ -4,6 +4,7 @@ import {
   CriterionResult,
   CriterionResultStatus,
   CriterionResultUserImpact,
+  FileDisplay,
   Prisma,
   StoredFile
 } from "@prisma/client";
@@ -418,30 +419,14 @@ export class AuditService {
     pageId: number,
     topic: number,
     criterium: number,
-    file: Express.Multer.File
+    file: Express.Multer.File,
+    display: FileDisplay = FileDisplay.ATTACHMENT
   ) {
-    const randomPrefix = nanoid();
-
-    const key = `audits/${editUniqueId}/${randomPrefix}/${file.originalname}`;
-
-    const thumbnailKey = `audits/${editUniqueId}/${randomPrefix}/thumbnail_${file.originalname}`;
-
-    const thumbnailBuffer = await sharp(file.buffer)
-      .jpeg({
-        mozjpeg: true
-      })
-      .flatten({ background: { r: 255, g: 255, b: 255, alpha: 0 } })
-      .resize(200, 200, { fit: "inside" })
-      .toBuffer();
-
-    await Promise.all([
-      this.fileStorageService.uploadFile(file.buffer, file.mimetype, key),
-      this.fileStorageService.uploadFile(
-        thumbnailBuffer,
-        "image/jpeg",
-        thumbnailKey
-      )
-    ]);
+    const { key, thumbnailKey } = await this.uploadFileToStorage(
+      editUniqueId,
+      file,
+      { createThumbnail: display === FileDisplay.ATTACHMENT }
+    );
 
     const storedFile = await this.prisma.storedFile.create({
       data: {
@@ -459,7 +444,8 @@ export class AuditService {
         originalFilename: file.originalname,
         mimetype: file.mimetype,
         size: file.size,
-        thumbnailKey
+        thumbnailKey,
+        display
       }
     });
 
@@ -507,35 +493,16 @@ export class AuditService {
     return true;
   }
 
-  async saveNotesFile(editUniqueId: string, file: Express.Multer.File) {
-    const randomPrefix = nanoid();
-
-    const key = `audits/${editUniqueId}/${randomPrefix}/${file.originalname}`;
-
-    let thumbnailKey;
-
-    if (file.mimetype.startsWith("image")) {
-      // If it's an image, create a thumbnail and upload it
-      thumbnailKey = `audits/${editUniqueId}/${randomPrefix}/thumbnail_${file.originalname}`;
-
-      const thumbnailBuffer = await sharp(file.buffer)
-        .resize(200, 200, { fit: "inside" })
-        .jpeg({
-          mozjpeg: true
-        })
-        .toBuffer();
-
-      await Promise.all([
-        this.fileStorageService.uploadFile(file.buffer, file.mimetype, key),
-        this.fileStorageService.uploadFile(
-          thumbnailBuffer,
-          "image/jpeg",
-          thumbnailKey
-        )
-      ]);
-    } else {
-      await this.fileStorageService.uploadFile(file.buffer, file.mimetype, key);
-    }
+  async saveNotesFile(
+    editUniqueId: string,
+    file: Express.Multer.File,
+    display: FileDisplay = FileDisplay.ATTACHMENT
+  ) {
+    const { key, thumbnailKey } = await this.uploadFileToStorage(
+      editUniqueId,
+      file,
+      { createThumbnail: display === FileDisplay.ATTACHMENT }
+    );
 
     const storedFile = await this.prisma.auditFile.create({
       data: {
@@ -550,11 +517,49 @@ export class AuditService {
         mimetype: file.mimetype,
         size: file.size,
 
-        thumbnailKey
+        thumbnailKey,
+        display
       }
     });
 
     return storedFile;
+  }
+
+  async uploadFileToStorage(
+    uniqueId: string,
+    file: Express.Multer.File,
+    options?: { createThumbnail: boolean }
+  ): Promise<{ key: string; thumbnailKey?: string }> {
+    const randomPrefix = nanoid();
+
+    const key: string = `audits/${uniqueId}/${randomPrefix}/${file.originalname}`;
+
+    let thumbnailKey: string;
+
+    if (file.mimetype.startsWith("image") && options.createThumbnail) {
+      // If it's an image, create a thumbnail and upload it
+      thumbnailKey = `audits/${uniqueId}/${randomPrefix}/thumbnail_${file.originalname}`;
+
+      const thumbnailBuffer = await sharp(file.buffer)
+        .jpeg({
+          mozjpeg: true
+        })
+        .flatten({ background: { r: 255, g: 255, b: 255, alpha: 0 } })
+        .resize(200, 200, { fit: "inside" })
+        .toBuffer();
+
+      await Promise.all([
+        this.fileStorageService.uploadFile(file.buffer, file.mimetype, key),
+        this.fileStorageService.uploadFile(
+          thumbnailBuffer,
+          "image/jpeg",
+          thumbnailKey
+        )
+      ]);
+    } else {
+      await this.fileStorageService.uploadFile(file.buffer, file.mimetype, key);
+    }
+    return { key, thumbnailKey };
   }
 
   /**
@@ -839,7 +844,8 @@ export class AuditService {
         key: file.key,
         thumbnailKey: file.thumbnailKey,
         size: file.size,
-        mimetype: file.mimetype
+        mimetype: file.mimetype,
+        display: file.display
       })),
 
       criteriaCount: {
@@ -1006,7 +1012,8 @@ export class AuditService {
         exampleImages: r.exampleImages.map((img) => ({
           filename: img.originalFilename,
           key: img.key,
-          thumbnailKey: img.thumbnailKey
+          thumbnailKey: img.thumbnailKey,
+          display: img.display
         }))
       }))
     };

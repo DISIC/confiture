@@ -14,7 +14,7 @@ import MarkdownHelpButton from "./MarkdownHelpButton.vue";
 export interface Props {
   id: string;
   comment: string | null;
-  errorMessage?: FileErrorMessage | null;
+  errorMessage?: FileErrorMessage | string | null;
   exampleImages: AuditFile[];
   quickWin?: boolean;
   userImpact: CriterionResultUserImpact | null;

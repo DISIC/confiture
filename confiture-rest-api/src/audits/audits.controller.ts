@@ -28,6 +28,7 @@ import {
 import { Audit } from "src/generated/nestjs-dto/audit.entity";
 import { CriterionResult } from "src/generated/nestjs-dto/criterionResult.entity";
 import { MailService } from "../mail/mail.service";
+import { NotesFileDto } from "./dto/notes-file.dto";
 import { AuditExportService } from "./audit-export.service";
 import { AuditService } from "./audit.service";
 import { CreateAuditDto } from "./dto/create-audit.dto";
@@ -174,7 +175,8 @@ export class AuditsController {
       body.pageId,
       body.topic,
       body.criterium,
-      file
+      file,
+      body.display
     );
   }
 
@@ -191,7 +193,8 @@ export class AuditsController {
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
         })
     )
-    file: Express.Multer.File
+    file: Express.Multer.File,
+    @Body() body: NotesFileDto
   ) {
     const audit = await this.auditService.getAuditWithEditUniqueId(uniqueId);
 
@@ -199,7 +202,7 @@ export class AuditsController {
       return this.sendAuditNotFoundStatus(uniqueId);
     }
 
-    return await this.auditService.saveNotesFile(uniqueId, file);
+    return await this.auditService.saveNotesFile(uniqueId, file, body.display);
   }
 
   @Delete("/:uniqueId/results/examples/:exampleId")

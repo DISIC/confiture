@@ -169,6 +169,11 @@ model AuditTrace {
   Audit                Audit?
 }
 
+enum FileDisplay {
+  EDITOR
+  ATTACHMENT
+}
+
 model StoredFile {
   id               Int    @id @default(autoincrement())
   originalFilename String
@@ -183,6 +188,9 @@ model StoredFile {
   // S3 storage keys
   key          String
   thumbnailKey String
+
+  // Inside TipTap editor (EDITOR) or added as an attachment (ATTACHMENT)?
+  display FileDisplay @default(ATTACHMENT)
 
   criterionResult   CriterionResult? @relation(fields: [criterionResultId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   criterionResultId Int?
@@ -203,7 +211,10 @@ model AuditFile {
   key          String
   thumbnailKey String?
 
-  audit         Audit?  @relation(fields: [auditUniqueId], references: [editUniqueId], onDelete: Cascade)
+  audit   Audit?      @relation(fields: [auditUniqueId], references: [editUniqueId], onDelete: Cascade)
+  // Inside TipTap editor (EDITOR) or added as an attachment (ATTACHMENT)?
+  display FileDisplay @default(ATTACHMENT)
+
   auditUniqueId String?
 }
 
