@@ -175,7 +175,7 @@ const auditIsInProgress = computed(() => {
       v-else
       :value="resultsStore.auditProgress"
       label="Progression"
-      is-large
+      :size="12"
       class="fr-mb-3w audit-step-progress-bar"
     />
 

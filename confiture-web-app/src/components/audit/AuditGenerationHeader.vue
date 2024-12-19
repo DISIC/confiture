@@ -248,6 +248,7 @@ onMounted(() => {
         v-if="showAuditProgressBar"
         :value="resultStore.auditProgress"
         label="Progression de l’audit"
+        :size="4"
         class="progress-bar"
       />
 

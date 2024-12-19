@@ -3,14 +3,10 @@ import { computed } from "vue";
 
 const props = defineProps<{
   value: number;
-  label?: string;
-  isLarge?: boolean;
+  label: string;
+  size: number; // value in px
+  inline?: boolean;
 }>();
-
-/**
- * TODO:
- * - Refactor component
- */
 
 const progressPercentage = computed(() => {
   const percentage = props.value * 100;
@@ -24,15 +20,20 @@ const progressPercentage = computed(() => {
   return rounded;
 });
 const progressBarValue = computed(() => props.value * 100 + "%");
+const progressBarSize = computed(() => `${props.size / 16}rem`);
 </script>
 
 <template>
-  <div :class="['audit-progress', { 'audit-progress--thick': isLarge }]">
-    <span v-if="label" class="audit-progress-label">{{ label }}</span
-    ><span
+  <div :class="['audit-progress', { 'audit-progress--inline': inline }]">
+    <span :class="['audit-progress-label', { 'fr-sr-only': inline }]">
+      {{ label }}
+    </span>
+    <span
       :class="[
-        'fr-text--xs fr-text--action-high-grey fr-m-0 audit-progress-percentage',
-        { 'fr-text--sm': isLarge }
+        ' fr-text--action-high-grey fr-m-0 audit-progress-percentage',
+        {
+          'fr-text--xs': !inline
+        }
       ]"
     >
       {{ progressPercentage }}%
@@ -51,14 +52,25 @@ const progressBarValue = computed(() => props.value * 100 + "%");
 .audit-progress {
   background: none;
   display: grid;
-  gap: 0.25rem 1rem;
+  gap: v-bind(progressBarSize) 1rem;
   grid-template-columns: 1fr auto;
-  grid-template-rows: auto 0.25rem;
+  grid-template-rows: auto v-bind(progressBarSize);
 }
 
-.audit-progress--thick {
-  gap: 0.75rem 0;
-  grid-template-rows: auto 0.75rem;
+.audit-progress--inline {
+  grid-template-rows: v-bind(progressBarSize);
+  gap: 0 1rem;
+
+  .audit-progress-bar {
+    height: v-bind(progressBarSize);
+    grid-column: 1 / span 1;
+  }
+
+  .audit-progress-percentage {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+  }
 }
 
 .audit-progress-bar::after {

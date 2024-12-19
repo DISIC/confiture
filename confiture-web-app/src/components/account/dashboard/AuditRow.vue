@@ -13,6 +13,7 @@ import {
   getCriteriaCount,
   slugify
 } from "../../../utils";
+import AuditProgressBar from "../../audit/AuditProgressBar.vue";
 import DeleteModal from "../../audit/DeleteModal.vue";
 import DuplicateModal from "../../audit/DuplicateModal.vue";
 import CopyIcon from "../../icons/CopyIcon.vue";
@@ -181,8 +182,11 @@ function copyStatementLink(uniqueId: string) {
       {{ getCriteriaCount(audit.auditType) }} critères
     </p>
 
-    <!-- Compliance level -->
-    <div class="audit-compliance-level">
+    <!-- Compliance level / Progression level -->
+    <div
+      v-if="audit.status === AuditStatus.COMPLETED"
+      class="audit-compliance-level"
+    >
       <template v-if="audit.auditType === AuditType.FULL">
         <p
           class="fr-badge fr-badge--sm fr-badge--no-icon fr-mb-0"
@@ -236,6 +240,14 @@ function copyStatementLink(uniqueId: string) {
         </span>
       </p>
     </div>
+
+    <AuditProgressBar
+      v-else
+      label="Progression de l’audit"
+      :value="0.83"
+      :size="8"
+      inline
+    />
 
     <!-- Main action -->
     <RouterLink
