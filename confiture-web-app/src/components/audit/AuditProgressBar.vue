@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { useResultsStore } from "../../store";
-
-defineProps<{
-  label: string;
+const props = defineProps<{
+  value: number;
+  label?: string;
   isLarge?: boolean;
 }>();
 
-const results = useResultsStore();
+/**
+ * TODO:
+ * - Refactor component
+ */
 
 const progressPercentage = computed(() => {
-  const percentage = results.auditProgress * 100;
+  const percentage = props.value * 100;
   const rounded = Math.round(percentage);
 
   // Only return 100% when the progress is actually 100%, 99.99% would return 99%
@@ -21,12 +23,12 @@ const progressPercentage = computed(() => {
 
   return rounded;
 });
-const progressBarValue = computed(() => results.auditProgress * 100 + "%");
+const progressBarValue = computed(() => props.value * 100 + "%");
 </script>
 
 <template>
   <div :class="['audit-progress', { 'audit-progress--thick': isLarge }]">
-    <span class="audit-progress-label">{{ label }}</span
+    <span v-if="label" class="audit-progress-label">{{ label }}</span
     ><span
       :class="[
         'fr-text--xs fr-text--action-high-grey fr-m-0 audit-progress-percentage',
