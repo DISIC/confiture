@@ -85,19 +85,17 @@ defineExpose({ buttonRef, closeOptions });
     >
       {{ title }}
     </button>
-    <Transition>
-      <div
-        v-if="showContent"
-        :id="`dropdown-${uniqueId}`"
-        :class="[
-          'fr-p-2w dropdown-content',
-          { 'dropdown-content-left': alignLeft }
-        ]"
-        role="menu"
-      >
-        <slot />
-      </div>
-    </Transition>
+    <div
+      :id="`dropdown-${uniqueId}`"
+      :hidden="!showContent"
+      :class="[
+        'fr-p-2w dropdown-content',
+        { 'dropdown-content-left': alignLeft }
+      ]"
+      role="menu"
+    >
+      <slot />
+    </div>
   </div>
 </template>
 

@@ -1,10 +1,40 @@
 {
   "auditType": "FULL",
-  "procedureName": "Ma procédure test",
+  "procedureName": "Audit de mon petit site",
   "pages": [
-    { "name": "Accueil", "url": "https://example.com" },
-    { "name": "Contact", "url": "https://example.com/contact" }
+    {
+      "name": "Accueil",
+      "url": "https://example.com"
+    },
+    {
+      "name": "Contact",
+      "url": "https://example.com/contact"
+    },
+    {
+      "name": "À propos",
+      "url": "https://example.com/a-propos"
+    },
+    {
+      "name": "Blog",
+      "url": "https://example.com/blog"
+    },
+    {
+      "name": "Article",
+      "url": "https://example.com/blog/article"
+    },
+    {
+      "name": "Connexion",
+      "url": "https://example.com/connexion"
+    },
+    {
+      "name": "Documentation",
+      "url": "https://example.com/documentation"
+    },
+    {
+      "name": "FAQ",
+      "url": "https://example.com/faq"
+    }
   ],
-  "procedureAuditorName": "Odette Smith",
-  "procedureAuditorEmail": "odette.smith@splootify.com"
+  "auditorEmail": "etienne.durand@example.com",
+  "auditorName": "Étienne Durand"
 }

@@ -104,6 +104,7 @@ function resetFilters() {
     :pages-data="pagesErrors"
     :transverse-data="transverseErrors"
     :show-filters="true"
+    tab-slug="errors"
   >
     <template #filter>
       <div class="fr-text--bold fr-text--xl fr-mb-2w filter-title">Filtres</div>
@@ -202,7 +203,7 @@ function resetFilters() {
 
     <template v-if="transverseErrors.topics.length" #transverse-data>
       <section class="fr-mb-8w">
-        <h2 id="elements-transverses" class="fr-h3 fr-mb-2w page-title">
+        <h2 id="errors_elements-transverses" class="fr-h3 fr-mb-2w page-title">
           Éléments transverses
         </h2>
 
@@ -227,7 +228,7 @@ function resetFilters() {
 
     <template #pages-data>
       <section v-for="page in pagesErrors" :key="page.id" class="fr-mb-8w">
-        <h2 :id="`${page.id}`" class="fr-h3 fr-mb-2w page-title">
+        <h2 :id="`errors_${page.id}`" class="fr-h3 fr-mb-2w page-title">
           {{ page.name }}
         </h2>
         <a

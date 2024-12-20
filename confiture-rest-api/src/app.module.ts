@@ -8,6 +8,8 @@ import { MailModule } from "./mail/mail.module";
 import { AuthModule } from "./auth/auth.module";
 import { ProfileModule } from "./profile/profile.module";
 import { UserMiddleware } from "./auth/user.middleware";
+import { DebugController } from "./debug.controller";
+import { PrismaService } from "./prisma.service";
 
 @Module({
   imports: [
@@ -23,7 +25,12 @@ import { UserMiddleware } from "./auth/user.middleware";
     AuthModule,
     ProfileModule
   ],
-  controllers: [HealthCheckController]
+  providers: process.env.DEBUG_ENDPOINTS ? [PrismaService] : [],
+  controllers: [
+    HealthCheckController,
+    // enable debug enpoints only when the DEBUG_ENDPOINTS variable is set
+    ...(process.env.DEBUG_ENDPOINTS ? [DebugController] : [])
+  ]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

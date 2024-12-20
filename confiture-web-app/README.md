@@ -31,24 +31,6 @@ Lancer le [serveur local sur le port 3000](http://localhost:3000) :
 yarn dev
 ```
 
-## Tests
-
-[Cypress](https://www.cypress.io/) est utilisé pour lancer des tests end-to-end (e2e) dans un navigateur pour reproduire le comportement des utilisateurs.
-
-Les tests peuvent être lancés de 2 manières :
-
-- Via l’application Cypress avec :
-
-  ```sh
-  yarn cypress open
-  ```
-
-- Via le terminal avec :
-
-  ```sh
-  yarn cypress run
-  ```
-
 ## Guidelines
 
 - Utiliser les media queries en "desktop first" et avec la notation suivante avec les [valeurs de points de rupture du DSFR](https://www.systeme-de-design.gouv.fr/elements-d-interface/fondamentaux-techniques/grille-et-points-de-rupture) :

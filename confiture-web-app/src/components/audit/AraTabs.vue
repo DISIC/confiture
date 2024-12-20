@@ -81,8 +81,7 @@ watch(currentTab, (currentTab) => {
           @keydown.home.prevent="selectFirstTab"
           @keydown.end.prevent="selectLastTab"
         >
-          <LayoutIcon v-if="i === 0" class="fr-mr-2v" />
-          {{ tab.label }}
+          <LayoutIcon v-if="i === 0" class="fr-mr-2v" />{{ tab.label }}
         </button>
       </li>
     </ul>

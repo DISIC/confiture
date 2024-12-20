@@ -48,7 +48,9 @@ const tabs = computed(() => [
 const showCopyAlert = ref(false);
 
 async function copyReportUrl() {
-  const url = `${window.location.origin}/rapports/${uniqueId}`;
+  const url =
+    window.location.origin +
+    router.resolve({ name: "report", params: { uniqueId } }).fullPath;
 
   navigator.clipboard.writeText(url).then(() => {
     showCopyAlert.value = true;

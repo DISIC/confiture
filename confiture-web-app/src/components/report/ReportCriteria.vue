@@ -9,6 +9,7 @@ import { ReportImprovement } from "./getReportImprovements";
 defineProps<{
   count: number;
   pagesData: ReportError[] | ReportImprovement[];
+  tabSlug: string;
   transverseData: ReportError | ReportImprovement;
   showFilters?: boolean;
   topNotice?: string;
@@ -36,12 +37,12 @@ const hasFilters = computed(() => {
           <button
             class="fr-sidemenu__btn"
             hidden
-            aria-controls="fr-sidemenu-wrapper"
+            :aria-controls="`report-${tabSlug}_sidemenu-wrapper`"
             aria-expanded="false"
           >
             Pages
           </button>
-          <div id="fr-sidemenu-wrapper" class="fr-collapse">
+          <div :id="`report-${tabSlug}_sidemenu-wrapper`" class="fr-collapse">
             <div class="fr-sidemenu__title fr-mb-2w">Pages</div>
             <ul class="fr-sidemenu__list">
               <li
@@ -56,10 +57,10 @@ const hasFilters = computed(() => {
               >
                 <a
                   class="fr-sidemenu__link"
-                  href="#elements-transverses"
+                  :href="`#${tabSlug}_elements-transverses`"
                   :aria-current="
                     route.hash
-                      ? isActive('#elements-transverses')
+                      ? isActive(`#${tabSlug}_elements-transverses`)
                         ? 'true'
                         : undefined
                       : 'true'
@@ -72,13 +73,17 @@ const hasFilters = computed(() => {
                 :key="page.name"
                 class="fr-sidemenu__item"
                 :class="{
-                  'fr-sidemenu__item--active': isActive(`#${page.id}`)
+                  'fr-sidemenu__item--active': isActive(
+                    `#${tabSlug}_${page.id}`
+                  )
                 }"
               >
                 <a
                   class="fr-sidemenu__link"
-                  :href="`#${page.id}`"
-                  :aria-current="isActive(`#${page.id}`) ? 'true' : undefined"
+                  :href="`#${tabSlug}_${page.id}`"
+                  :aria-current="
+                    isActive(`#${tabSlug}_${page.id}`) ? 'true' : undefined
+                  "
                 >
                   {{ page.name }}
                 </a>

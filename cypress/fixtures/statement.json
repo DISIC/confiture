@@ -1,0 +1,13 @@
+{
+  "auditInitiator": "Mairie de Tours",
+  "auditorOrganisation": "Web Audit Services Corp.",
+  "procedureUrl": "https://example.com",
+  "contactName": "Philipinne Jolivet",
+  "contactEmail": "philipinne-jolivet@example.com",
+  "contactFormUrl": "https://example.com/contact",
+  "technologies": "HTML, CSS",
+  "tools": "Firefox Devtools, AXE Webextension",
+  "notCompliantContent": "Sit aliquip velit adipisicing esse cupidatat. Dolor nisi do Lorem laboris cillum.",
+  "derogatedContent": "Non officia voluptate id magna culpa consectetur ex officia quis magna quis sint.",
+  "notInScopeContent": "Nostrud duis ut sint et et. Consequat fugiat sunt est elit sunt."
+}

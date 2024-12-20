@@ -122,7 +122,6 @@ function updatePageOrder(startIndex: number, endIndex: number) {
           class="fr-btn fr-btn--tertiary-no-outline"
           type="button"
           :disabled="pages.length === 1"
-          data-cy="delete"
           @click="deletePage(i)"
         >
           Supprimer

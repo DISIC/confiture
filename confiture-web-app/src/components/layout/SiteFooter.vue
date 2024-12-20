@@ -30,7 +30,7 @@ const bottomLinks = [
 </script>
 
 <template>
-  <footer id="footer" class="fr-footer" role="contentinfo">
+  <footer id="footer" class="fr-footer fr-mt-auto" role="contentinfo">
     <div v-if="accountStore.account" class="fr-footer__top">
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--start fr-grid-row--gutters">

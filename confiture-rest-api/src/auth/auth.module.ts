@@ -30,6 +30,7 @@ import { CreateAccountController } from "./create-account.controller";
     }),
     FeedbackModule,
     AuditsModule
-  ]
+  ],
+  exports: [AuthService]
 })
 export class AuthModule {}

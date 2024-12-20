@@ -20,11 +20,14 @@ export const useAccountStore = defineStore("account", {
     let authToken = localStorage.getItem(AUTH_TOKEN_STORAGE_KEY) ?? null;
 
     if (authToken) {
-      const payload = jwtDecode(authToken) as AuthenticationJwtPayload;
+      try {
+        const payload = jwtDecode(authToken) as AuthenticationJwtPayload;
 
-      const isTokenExpired = payload.exp * 1000 < Date.now();
-
-      if (isTokenExpired) {
+        const isTokenExpired = payload.exp * 1000 < Date.now();
+        if (isTokenExpired) {
+          throw "tokenIsExpired";
+        }
+      } catch {
         authToken = null;
         localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
       }
