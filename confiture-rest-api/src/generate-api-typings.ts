@@ -14,7 +14,7 @@ async function main() {
 
   const ast = await openapiTS(document as OpenAPI3);
   const fileContent = "/* eslint-disable */\n" + ast;
-  const resolvedPath = resolve(process.cwd(), "./confiture-api.ts");
+  const resolvedPath = resolve(__dirname, "../confiture-api.ts");
   await writeFile(resolvedPath, fileContent, {
     encoding: "utf-8"
   });
