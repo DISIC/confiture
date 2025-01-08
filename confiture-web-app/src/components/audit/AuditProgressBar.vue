@@ -53,7 +53,7 @@ const progressBarSize = computed(() => `${props.size / 16}rem`);
   background: none;
   display: grid;
   gap: v-bind(progressBarSize) 1rem;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr 4ch;
   grid-template-rows: auto v-bind(progressBarSize);
 }
 
@@ -91,5 +91,6 @@ const progressBarSize = computed(() => `${props.size / 16}rem`);
 .audit-progress-percentage {
   color: var(--text-mention-grey);
   align-self: end;
+  text-align: end;
 }
 </style>
