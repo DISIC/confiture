@@ -11,8 +11,6 @@ RUN mkdir -p confiture-web-app/src/types
 COPY package.json yarn.lock CHANGELOG.md ROADMAP.md .
 COPY confiture-web-app/package.json confiture-web-app/
 COPY confiture-rest-api/ confiture-rest-api/
-RUN pwd
-RUN ls
 RUN yarn install --frozen-lockfile --non-interactive --production=false
 RUN ls confiture-web-app/src/types
 
