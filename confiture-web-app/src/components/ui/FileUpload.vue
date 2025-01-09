@@ -4,12 +4,14 @@ import { computed, Ref, ref } from "vue";
 import { useIsOffline } from "../../composables/useIsOffline";
 import { useUniqueId } from "../../composables/useUniqueId";
 import { FileErrorMessage } from "../../enums";
-import { AuditFile } from "../../types";
+import { AuditFile, NotesFile } from "../../types";
 import { formatBytes, getUploadUrl } from "../../utils";
+
+type ComponentFile = NotesFile | AuditFile;
 
 export interface Props {
   acceptedFormats?: Array<string>;
-  auditFiles: AuditFile[];
+  auditFiles: ComponentFile[];
   errorMessage?: FileErrorMessage | null;
   maxFileSize?: string;
   multiple?: boolean;
@@ -84,21 +86,21 @@ function deleteFile(file: AuditFile) {
   emit("delete-file", file);
 }
 
-function getFileName(auditFile: AuditFile) {
+function getFileName(auditFile: ComponentFile) {
   return auditFile.originalFilename;
 }
 
-function getFullFileName(auditFile: AuditFile) {
+function getFullFileName(auditFile: ComponentFile) {
   return getFileName(auditFile) + " (" + getFileDetails(auditFile) + ")";
 }
 
-function getFileDetails(auditFile: AuditFile) {
+function getFileDetails(auditFile: ComponentFile) {
   const name = auditFile.originalFilename;
   const extension = name.substring(name.lastIndexOf(".") + 1).toUpperCase();
   return extension + " – " + formatBytes(auditFile.size);
 }
 
-function isViewable(auditFile: AuditFile) {
+function isViewable(auditFile: ComponentFile) {
   return (
     auditFile.mimetype.startsWith("image") || auditFile.mimetype.includes("pdf")
   );
@@ -158,7 +160,7 @@ function onFileRequestFinished() {
 
     <!-- Audit files -->
     <ul class="files">
-      <li v-for="auditFile in auditFiles" :key="auditFile.id">
+      <li v-for="auditFile in auditFiles" :key="auditFile.key">
         <img
           v-if="auditFile.thumbnailKey"
           class="fr-icon--lg file-thumbnail"
@@ -211,7 +213,7 @@ function onFileRequestFinished() {
               class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-bin-line fr-mb-0"
               :disabled="isOffline"
               :title="'Supprimer ' + getFullFileName(auditFile)"
-              @click="deleteFile(auditFile)"
+              @click="deleteFile(auditFile as AuditFile)"
             >
               Supprimer
               <span class="sr-only">{{ getFullFileName(auditFile) }}</span>

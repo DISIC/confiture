@@ -7,9 +7,14 @@ ARG VITE_SENTRY_ENVIRONMENT
 ARG VITE_SENTRY_RELEASE
 WORKDIR /app
 RUN mkdir -p confiture-web-app/src/assets
+RUN mkdir -p confiture-web-app/src/types
 COPY package.json yarn.lock CHANGELOG.md ROADMAP.md .
 COPY confiture-web-app/package.json confiture-web-app/
+COPY confiture-rest-api/ confiture-rest-api/
 RUN yarn install --frozen-lockfile --non-interactive --production=false
+RUN ls confiture-web-app/src/types
+
+
 WORKDIR /app/confiture-web-app
 COPY confiture-web-app/ .
 RUN VITE_MATOMO_ENABLE=1 SENTRY_ORG=${SENTRY_ORG} SENTRY_PROJECT=${SENTRY_PROJECT} SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} VITE_SENTRY_DSN=${VITE_SENTRY_DSN} VITE_SENTRY_ENVIRONMENT=${VITE_SENTRY_ENVIRONMENT} VITE_SENTRY_RELEASE=${VITE_SENTRY_RELEASE} yarn build

@@ -4,9 +4,9 @@ import rgaa from "../../criteres.json";
 import { ReportStoreState } from "../../store";
 import {
   AuditReport,
-  CriterionResultUserImpact,
   CriteriumResultStatus,
-  ReportCriteriumResult
+  ReportCriteriumResult,
+  ReportUserImpact
 } from "../../types";
 
 export type ReportError = {
@@ -24,7 +24,7 @@ export type ReportError = {
 export function getReportErrors(
   report: ReportStoreState,
   quickWinFilter: boolean,
-  userImpactFilters: Array<CriterionResultUserImpact | null>
+  userImpactFilters: Array<ReportUserImpact>
 ): ReportError[] {
   const resultsGroupedByPage = {
     // include pages with no errors

@@ -102,7 +102,9 @@ model TestEnvironment {
   assistiveTechnology String
   browser             String
 
+  /// @DtoEntityHidden
   audit         Audit?  @relation(fields: [auditUniqueId], references: [editUniqueId], onDelete: Cascade)
+  /// @DtoEntityHidden
   auditUniqueId String?
 
   @@unique([platform, operatingSystem, assistiveTechnology, browser, auditUniqueId])
@@ -115,12 +117,15 @@ model AuditedPage {
   url   String
 
   // parent audit when the page is a user made page
+  /// @DtoEntityHidden
   audit         Audit?  @relation(name: "UserPages", fields: [auditUniqueId], references: [editUniqueId], onDelete: Cascade)
   auditUniqueId String?
 
   // parent audit when the page is a transverse page
+  /// @DtoEntityHidden
   auditTransverse Audit? @relation(name: "TransversePage")
 
+  /// @DtoEntityHidden
   results CriterionResult[]
 }
 
@@ -184,7 +189,9 @@ model StoredFile {
   key          String
   thumbnailKey String
 
+  /// @DtoEntityHidden
   criterionResult   CriterionResult? @relation(fields: [criterionResultId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  /// @DtoEntityHidden
   criterionResultId Int?
 }
 
@@ -203,7 +210,9 @@ model AuditFile {
   key          String
   thumbnailKey String?
 
+  /// @DtoEntityHidden
   audit         Audit?  @relation(fields: [auditUniqueId], references: [editUniqueId], onDelete: Cascade)
+  /// @DtoEntityHidden
   auditUniqueId String?
 }
 

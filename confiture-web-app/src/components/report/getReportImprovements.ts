@@ -63,7 +63,7 @@ export function getReportImprovements(
                 improvements: sortBy(
                   results.filter(hasImprovement).map(getImprovementObject),
                   "criterium"
-                )
+                ) as ReportImprovement["topics"][0]["improvements"]
               };
             })
           ),

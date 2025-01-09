@@ -1,0 +1,4 @@
+.github
+.husky
+cypress
+node_modules

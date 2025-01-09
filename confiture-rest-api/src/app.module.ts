@@ -15,7 +15,9 @@ import { PrismaService } from "./prisma.service";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: configValidationSchema
+      validationSchema: !process.env.GENERATE_TYPES
+        ? configValidationSchema
+        : undefined
     }),
     FeedbackModule,
     AuditsModule,

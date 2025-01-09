@@ -37,8 +37,8 @@ const showActions = computed(() => {
 function updateProfile() {
   accountStore
     .updateProfile({
-      name: name.value || null,
-      orgName: orgName.value || null
+      name: name.value,
+      orgName: orgName.value
     })
     .then(() => {
       notify("success", undefined, "Profil mis à jour avec succès");

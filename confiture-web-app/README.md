@@ -46,3 +46,15 @@ yarn dev
   1. `fr-btn fr-btn--secondary`
   2. `fr-mt-4w`
   3. `submit-button`
+- Lors des interactions avec le backend, utiliser les types générés dans `src/types/confiture-api.ts`. Pour générer ce fichier, utiliser la commande `yarn copytypes` depuis le dossier racine du projet. Exemple :
+
+  ```typescript
+  import { paths } from "./confiture-api";
+
+  export type GetAuditReportResponseBody =
+    paths["/reports/{consultUniqueId}"]["get"]["responses"]["200"]["content"]["application/json"];
+
+  const data = (await ky
+    .get("/reports/{consultUniqueId}")
+    .json()) as GetAuditReportResponseBody;
+  ```

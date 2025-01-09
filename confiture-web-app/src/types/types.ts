@@ -1,8 +1,4 @@
-export interface AuditRecipent {
-  id: number;
-  name: string;
-  email: string;
-}
+import { components } from "./confiture-api";
 
 export interface AuditEnvironment {
   id: number;
@@ -24,6 +20,8 @@ export enum AuditType {
   COMPLEMENTARY = "COMPLEMENTARY",
   FULL = "FULL"
 }
+
+export type AuditTypeString = `${AuditType}`;
 
 export enum AuditStatus {
   NOT_STARTED = "NOT_STARTED",
@@ -82,18 +80,6 @@ export type UpdateAuditRequestData = Omit<Audit, "environments" | "pages"> & {
   pages: Omit<AuditPage, "id" | "order">[];
 };
 
-export interface CreateFeedbackRequestData {
-  easyToUse: string;
-  easyToUnderstand: string;
-
-  feedback: string;
-  suggestions: string;
-
-  name?: string;
-  email?: string;
-  occupations?: string[];
-}
-
 export enum CriteriumResultStatus {
   NOT_TESTED = "NOT_TESTED",
   COMPLIANT = "COMPLIANT",
@@ -107,14 +93,9 @@ export enum CriterionResultUserImpact {
   BLOCKING = "BLOCKING"
 }
 
-export interface AuditFile {
-  id: number;
-  originalFilename: string;
-  size: number;
-  key: string;
-  mimetype: string;
-  thumbnailKey: string;
-}
+export type AuditFile = components["schemas"]["AuditFile"];
+
+export type NotesFile = components["schemas"]["NotesFile"];
 
 export interface CriteriumResult {
   // ID

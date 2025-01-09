@@ -11,7 +11,11 @@ import PageMeta from "../components/PageMeta";
 import DsfrField from "../components/ui/DsfrField.vue";
 import { useNotifications } from "../composables/useNotifications";
 import { usePreviousRoute } from "../composables/usePreviousRoute";
+import { paths } from "../types/confiture-api";
 import { captureWithPayloads } from "../utils";
+
+export type CreateFeedbackRequestData =
+  paths["/feedback"]["post"]["requestBody"]["content"]["application/json"];
 
 const availableRadioAnswers = [
   { label: "Oui", slug: "yes", emoji: emojiYes },
@@ -29,14 +33,14 @@ const availableJobs = [
   "Autre"
 ];
 
-const easyToUse = ref("");
-const easyToUnderstand = ref("");
+const easyToUse = ref<CreateFeedbackRequestData["easyToUse"]>();
+const easyToUnderstand = ref<CreateFeedbackRequestData["easyToUnderstand"]>();
 const feedback = ref("");
 const suggestions = ref("");
 const contact = ref();
 const name = ref("");
 const email = ref("");
-const occupations = ref([]);
+const occupations = ref<string[]>([]);
 
 const showSuccess = ref(false);
 
@@ -46,18 +50,23 @@ const notify = useNotifications();
  * Submit form and display success notice
  */
 function submitFeedback() {
+  const body: CreateFeedbackRequestData = {
+    easyToUse: easyToUse.value!,
+    easyToUnderstand: easyToUnderstand.value!,
+    feedback: feedback.value,
+    suggestions: suggestions.value,
+    ...(contact.value === "yes" && {
+      email: email.value,
+      name: name.value,
+      occupations:
+        // FIXME: the @nestjs/swagger CLI plugin generating the API types doesnt seem to pick up on the each option
+        // see: https://github.com/nestjs/swagger/issues/2027
+        occupations.value as unknown as CreateFeedbackRequestData["occupations"]
+    })
+  };
+
   ky.post("/api/feedback", {
-    json: {
-      easyToUse: easyToUse.value,
-      easyToUnderstand: easyToUnderstand.value,
-      feedback: feedback.value,
-      suggestions: suggestions.value,
-      ...(contact.value === "yes" && {
-        email: email.value,
-        name: name.value,
-        occupations: occupations.value
-      })
-    }
+    json: body
   })
     .then(() => {
       showSuccess.value = true;
@@ -130,6 +139,7 @@ const previousPageName =
               type="radio"
               name="easyToUse"
               :value="answer.label"
+              required
             />
             <label class="fr-label" :for="`easy-to-use-${answer.slug}`">
               {{ answer.label }}
@@ -161,6 +171,7 @@ const previousPageName =
               type="radio"
               name="easyToUnderstand"
               :value="answer.label"
+              required
             />
             <label class="fr-label" :for="`easy-to-understand-${answer.slug}`">
               {{ answer.label }}

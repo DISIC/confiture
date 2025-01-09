@@ -37,24 +37,7 @@ export class AuditReportDto {
    */
   accessibilityRate: number;
 
-  /**
-   * @example {
-   *  total: 106;
-   *  compliant: 30;
-   *  notCompliant: 46;
-   *  blocking: 12;
-   *  applicable: 76;
-   *  notApplicable: 30;
-   * }
-   */
-  criteriaCount: {
-    total: number;
-    compliant: number;
-    notCompliant: number;
-    blocking: number;
-    applicable: number;
-    notApplicable: number;
-  };
+  criteriaCount: CriteriaCount;
 
   /** Global distribution of criteria by result */
   resultDistribution: ResultDistribution;
@@ -66,6 +49,21 @@ export class AuditReportDto {
   topicDistributions: TopicResultDistribution[];
 
   results: ReportCriterionResult[];
+}
+
+class CriteriaCount {
+  /** @example 106 */
+  total: number;
+  /** @example 30 */
+  compliant: number;
+  /** @example 46 */
+  notCompliant: number;
+  /** @example 12 */
+  blocking: number;
+  /** @example 76 */
+  applicable: number;
+  /** @example 30 */
+  notApplicable: number;
 }
 
 class RawAndPercentage {
@@ -187,6 +185,8 @@ class ReportCriterionResult {
   userImpact: CriterionResultUserImpact | null;
 
   notApplicableComment: string | null;
+
+  quickWin: boolean;
 }
 
 class ExampleImage {

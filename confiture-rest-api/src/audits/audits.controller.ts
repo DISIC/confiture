@@ -39,6 +39,8 @@ import { UploadImageDto } from "./dto/upload-image.dto";
 import { AuthRequired } from "src/auth/auth-required.decorator";
 import { User } from "src/auth/user.decorator";
 import { AuthenticationJwtPayload } from "src/auth/jwt-payloads";
+import { AuditListingItemDto } from "./dto/audit-listing-item.dto";
+import { StoredFile } from "src/generated/nestjs-dto/storedFile.entity";
 
 @Controller("audits")
 @ApiTags("Audits")
@@ -76,6 +78,7 @@ export class AuditsController {
    */
   @Get()
   @AuthRequired()
+  @ApiOkResponse({ type: AuditListingItemDto, isArray: true })
   async getAuditList(@User() user: AuthenticationJwtPayload) {
     return this.auditService.getAuditsByAuditorEmail(user.email);
   }
@@ -146,6 +149,7 @@ export class AuditsController {
 
   @Post("/:uniqueId/results/examples")
   @UseInterceptors(FileInterceptor("image"))
+  @ApiCreatedResponse({ type: StoredFile })
   async uploadExampleImage(
     @Param("uniqueId") uniqueId: string,
     @UploadedFile(
