@@ -1320,9 +1320,12 @@ export class AuditService {
         ...a.pages.flatMap((p) => p.results)
       ];
 
+      const pagesResults = a.pages.flatMap((p) => p.results);
+
       const progress =
-        allResults.filter((r) => r.status !== CriterionResultStatus.NOT_TESTED)
-          .length /
+        pagesResults.filter(
+          (r) => r.status !== CriterionResultStatus.NOT_TESTED
+        ).length /
         (CRITERIA_BY_AUDIT_TYPE[a.auditType].length * a.pages.length);
 
       let complianceLevel = null;
@@ -1370,10 +1373,6 @@ export class AuditService {
 
       const statementIsPublished = !!a.initiator;
 
-      const pagesResults = allResults.filter(
-        (r) => r.pageId !== a.transverseElementsPageId
-      );
-
       const auditIsComplete =
         pagesResults.length ===
           CRITERIA_BY_AUDIT_TYPE[a.auditType].length * a.pages.length &&
@@ -1396,7 +1395,8 @@ export class AuditService {
               ? "COMPLETED"
               : "IN_PROGRESS",
         estimatedCsvSize: 502 + a.pages.length * 318,
-        statementIsPublished
+        statementIsPublished,
+        progress
       };
     });
 

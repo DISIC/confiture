@@ -242,7 +242,7 @@ function copyStatementLink(uniqueId: string) {
       v-else
       class="fr-mr-4w"
       label="Progression de l’audit"
-      :value="0.83"
+      :value="audit.progress"
       :size="8"
       inline
     />

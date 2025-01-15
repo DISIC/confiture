@@ -24,6 +24,7 @@ export interface AccountAudit {
     | AuditStatus.NOT_STARTED
     | AuditStatus.IN_PROGRESS
     | AuditStatus.COMPLETED;
+  progress: number;
   creationDate: string;
   auditType: AuditType;
   complianceLevel: number;
