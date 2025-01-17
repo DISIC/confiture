@@ -209,6 +209,7 @@ export const useAuditStore = defineStore("audit", {
           editUniqueId: newAudit.editUniqueId,
           procedureName: newAudit.procedureName,
           status: originalAuditListingItem.status,
+          progress: originalAuditListingItem.progress,
           estimatedCsvSize: originalAuditListingItem.estimatedCsvSize,
           statementIsPublished: originalAuditListingItem.statementIsPublished
         };

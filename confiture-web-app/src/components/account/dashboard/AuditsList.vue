@@ -15,7 +15,13 @@ defineProps<{
 
 <template>
   <div>
-    <h2 class="fr-text--lg fr-text--regular fr-mb-2w sub-heading">
+    <h2
+      class="fr-badge fr-mb-2w audit-status"
+      :class="{
+        'fr-badge--green-emeraude': status === AuditStatus.COMPLETED,
+        'fr-badge--purple-glycine': status === AuditStatus.IN_PROGRESS
+      }"
+    >
       {{
         status === AuditStatus.IN_PROGRESS
           ? `En cours (${audits.length})`
@@ -31,16 +37,17 @@ defineProps<{
           Nom de l’audit
         </p>
         <p aria-hidden="true" class="fr-text--sm fr-text--bold fr-mb-0">
-          Statut
-        </p>
-        <p aria-hidden="true" class="fr-text--sm fr-text--bold fr-mb-0">
           Créé le
         </p>
         <p aria-hidden="true" class="fr-text--sm fr-text--bold fr-mb-0">
           Type d’audit
         </p>
         <p aria-hidden="true" class="fr-text--sm fr-text--bold fr-mb-0">
-          Taux de conformité
+          {{
+            status === AuditStatus.COMPLETED
+              ? "Taux de conformité"
+              : "Progression de l’audit"
+          }}
         </p>
       </div>
 
@@ -73,7 +80,7 @@ defineProps<{
 
 .headers {
   display: grid;
-  grid-template-columns: 2fr 0.75fr 0.75fr 0.75fr 1.25fr 1.5fr 1fr;
+  grid-template-columns: 2fr 0.75fr 0.75fr 1.25fr 1.5fr 1fr;
   grid-gap: 1rem;
 }
 

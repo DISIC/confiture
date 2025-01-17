@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { useResultsStore } from "../../store";
-
-defineProps<{
+const props = defineProps<{
+  value: number;
   label: string;
-  isLarge?: boolean;
+  size: number; // value in px
+  inline?: boolean;
 }>();
 
-const results = useResultsStore();
-
 const progressPercentage = computed(() => {
-  const percentage = results.auditProgress * 100;
+  const percentage = props.value * 100;
   const rounded = Math.round(percentage);
 
   // Only return 100% when the progress is actually 100%, 99.99% would return 99%
@@ -21,16 +19,21 @@ const progressPercentage = computed(() => {
 
   return rounded;
 });
-const progressBarValue = computed(() => results.auditProgress * 100 + "%");
+const progressBarValue = computed(() => props.value * 100 + "%");
+const progressBarSize = computed(() => `${props.size / 16}rem`);
 </script>
 
 <template>
-  <div :class="['audit-progress', { 'audit-progress--thick': isLarge }]">
-    <span class="audit-progress-label">{{ label }}</span
-    ><span
+  <div :class="['audit-progress', { 'audit-progress--inline': inline }]">
+    <span :class="['audit-progress-label', { 'fr-sr-only': inline }]">
+      {{ label }}
+    </span>
+    <span
       :class="[
-        'fr-text--xs fr-text--action-high-grey fr-m-0 audit-progress-percentage',
-        { 'fr-text--sm': isLarge }
+        ' fr-text--action-high-grey fr-m-0 audit-progress-percentage',
+        {
+          'fr-text--xs': !inline
+        }
       ]"
     >
       {{ progressPercentage }}%
@@ -49,14 +52,25 @@ const progressBarValue = computed(() => results.auditProgress * 100 + "%");
 .audit-progress {
   background: none;
   display: grid;
-  gap: 0.25rem 1rem;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: auto 0.25rem;
+  gap: v-bind(progressBarSize) 1rem;
+  grid-template-columns: 1fr 4ch;
+  grid-template-rows: auto v-bind(progressBarSize);
 }
 
-.audit-progress--thick {
-  gap: 0.75rem 0;
-  grid-template-rows: auto 0.75rem;
+.audit-progress--inline {
+  grid-template-rows: v-bind(progressBarSize);
+  gap: 0 1rem;
+
+  .audit-progress-bar {
+    height: v-bind(progressBarSize);
+    grid-column: 1 / span 1;
+  }
+
+  .audit-progress-percentage {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+  }
 }
 
 .audit-progress-bar::after {
@@ -77,5 +91,6 @@ const progressBarValue = computed(() => results.auditProgress * 100 + "%");
 .audit-progress-percentage {
   color: var(--text-mention-grey);
   align-self: end;
+  text-align: end;
 }
 </style>
