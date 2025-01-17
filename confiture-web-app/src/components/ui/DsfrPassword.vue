@@ -11,7 +11,13 @@ const props = defineProps<{
   id: string;
   autocomplete: "new-password" | "current-password";
   requirements?: string[];
+  /** Shows the "forgotten password" link. */
   showForgottenPasswordLink?: boolean;
+  /**
+   * If set, skip asking for user email and sends the password reset link to
+   * the currently signedin email
+   */
+  skipForgottenPasswordFirstStep?: boolean;
 }>();
 
 defineEmits<{
@@ -88,7 +94,13 @@ defineExpose({ inputRef, toggleRef });
     </div>
 
     <p v-if="showForgottenPasswordLink" class="fr-m-0">
-      <RouterLink :to="{ name: 'password-reset' }" class="fr-link">
+      <RouterLink
+        :to="{
+          name: 'password-reset',
+          state: { skipFirstStep: skipForgottenPasswordFirstStep }
+        }"
+        class="fr-link"
+      >
         Mot de passe oublié ?
       </RouterLink>
     </p>

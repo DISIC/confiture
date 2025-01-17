@@ -14,7 +14,7 @@ describe("Account", () => {
         cy.contains("button", "Valider").click();
         cy.contains("h1", "Consulter votre boite de réception");
         cy.contains(
-          `Un mail contenant un lien pour vérifier votre e-mail vient de vous être envoyé à l’adresse : ${email}`,
+          `Un mail contenant un lien pour vérifier votre e-mail vient de vous être envoyé à l’adresse : ${email}`
         );
       });
 
@@ -26,7 +26,7 @@ describe("Account", () => {
             "http://localhost:3000/api/debug/verification-token",
             {
               username: email,
-            },
+            }
           )
             .its("body")
             .then((verificationToken) => {
@@ -47,7 +47,7 @@ describe("Account", () => {
             "http://localhost:3000/api/debug/verification-token",
             {
               username: email,
-            },
+            }
           )
             .its("body")
             .then((verificationToken) => {
@@ -75,7 +75,7 @@ describe("Account", () => {
         cy.getByLabel("Mot de passe").type("blablablablablabla");
         cy.contains("button", "Valider").click();
         cy.contains(
-          "Un compte est déjà associé à cette adresse e-mail. Veuillez choisir une autre adresse e-mail. Si vous êtes le propriétaire de cette adresse e-mail vous pouvez vous connecter.",
+          "Un compte est déjà associé à cette adresse e-mail. Veuillez choisir une autre adresse e-mail. Si vous êtes le propriétaire de cette adresse e-mail vous pouvez vous connecter."
         );
         cy.getByLabel("Adresse e-mail").should("have.focus");
       });
@@ -94,7 +94,7 @@ describe("Account", () => {
         cy.contains("button", "Se connecter").click();
         cy.contains("h1", "Mes audits");
         cy.contains(
-          `Vous trouverez ici tous les audits associés à votre adresse e-mail : ${username}`,
+          `Vous trouverez ici tous les audits associés à votre adresse e-mail : ${username}`
         );
       });
     });
@@ -152,13 +152,13 @@ describe("Account", () => {
         cy.getByLabel("Adresse e-mail").type(username);
         cy.contains("button", "Valider").click();
         cy.contains(
-          `Un lien de réinitialisation vient de vous être envoyé à l’adresse e-mail suivante : ${username}`,
+          `Un lien de réinitialisation vient de vous être envoyé à l’adresse e-mail suivante : ${username}`
         );
 
         cy.request(
           "POST",
           "http://localhost:3000/api/debug/password-reset-verification-token",
-          { username },
+          { username }
         ).then((resp) => {
           const verificationLink = `http://localhost:3000/compte/reinitialiser-mot-de-passe?token=${resp.body}`;
           cy.visit(verificationLink);
@@ -184,6 +184,37 @@ describe("Account", () => {
       });
     });
 
+    it.only("User can reset their password (logged in)", () => {
+      cy.createTestAccount({ login: true }).then(({ username, password }) => {
+        cy.visit("http://localhost:3000/compte/parametres");
+        cy.contains("Changer de mot de passe").click();
+        cy.contains("Mot de passe oublié ?").click();
+        // cy.getByLabel("Adresse e-mail").type(username);
+        // cy.contains("button", "Valider").click();
+        cy.contains(
+          `Un lien de réinitialisation vient de vous être envoyé à l’adresse e-mail suivante : ${username}`
+        );
+
+        cy.request(
+          "POST",
+          "http://localhost:3000/api/debug/password-reset-verification-token",
+          { username }
+        ).then((resp) => {
+          const verificationLink = `http://localhost:3000/compte/reinitialiser-mot-de-passe?token=${resp.body}`;
+          cy.visit(verificationLink);
+
+          const newPassword = "blablablabla";
+
+          cy.contains("h1", "Changer de mot de passe");
+          cy.getByLabel("Mot de passe").type(newPassword);
+          cy.contains("button", "Changer de mot de passe").click();
+
+          cy.location("pathname").should("eq", "/compte");
+          cy.contains("Votre mot de passe a été mis à jour avec succès");
+        });
+      });
+    });
+
     it("User can update their email address", () => {
       cy.createTestAccount({ login: true }).then(({ password, uid }) => {
         cy.visit("http://localhost:3000/compte/parametres");
@@ -195,14 +226,14 @@ describe("Account", () => {
         cy.contains("button", "Changer d’adresse e-mail").click();
 
         cy.contains(
-          `Un lien pour confirmer votre nouvelle adresse e-mail vient de vous être envoyé à l’adresse suivante : ${newEmail}`,
+          `Un lien pour confirmer votre nouvelle adresse e-mail vient de vous être envoyé à l’adresse suivante : ${newEmail}`
         );
 
         // Simulate receiving the verification link by email.
         cy.request(
           "POST",
           "http://localhost:3000/api/debug/email-update-verification-token",
-          { uid },
+          { uid }
         ).then((resp) => {
           const verificationLink = `http://localhost:3000/compte/email-update-validation?token=${resp.body.token}`;
           cy.visit(verificationLink);
@@ -220,17 +251,17 @@ describe("Account", () => {
         // Delete account form
         cy.contains("button", "Supprimer mon compte").click();
         cy.getByLabel(
-          "Pour confirmer la suppression de votre compte veuillez saisir : je confirme vouloir supprimer mon compte",
+          "Pour confirmer la suppression de votre compte veuillez saisir : je confirme vouloir supprimer mon compte"
         ).type("je confirme vouloir supprimer mon compte");
         cy.getByLabel("Mot de passe").type(password);
         cy.contains("button", "Supprimer mon compte").click();
         cy.contains(
-          "Vous avez été déconnecté et votre compte a été supprimé avec succès",
+          "Vous avez été déconnecté et votre compte a été supprimé avec succès"
         );
 
         // Submit feedback form
         cy.getByLabel(
-          "Pourriez-vous nous donner la raison de votre départ ?",
+          "Pourriez-vous nous donner la raison de votre départ ?"
         ).type("Quoi ? Ça n’est pas un outil d’audit automatique ?!");
         cy.contains("button", "Envoyer mon avis").click();
         cy.contains("Votre avis a bien été envoyé");
@@ -270,7 +301,7 @@ describe("Account", () => {
       function fillPageField(
         pageIndex: number,
         field: string,
-        content: string,
+        content: string
       ) {
         cy.contains("Page " + pageIndex)
           .parent()
@@ -374,10 +405,10 @@ describe("Account", () => {
       cy.contains("button", "Copier le lien de l’audit").click();
       cy.get("@audit").then((audit) => {
         cy.assertClipboardValue(
-          `http://localhost:3000/audits/${audit.editId}/generation`,
+          `http://localhost:3000/audits/${audit.editId}/generation`
         );
         cy.contains(
-          "Le lien vers l’audit a bien été copié dans le presse-papier.",
+          "Le lien vers l’audit a bien été copié dans le presse-papier."
         );
       });
     });
@@ -387,10 +418,10 @@ describe("Account", () => {
       cy.contains("button", "Copier le lien du rapport").click();
       cy.get("@audit").then((audit) => {
         cy.assertClipboardValue(
-          `http://localhost:3000/rapport/${audit.reportId}`,
+          `http://localhost:3000/rapport/${audit.reportId}`
         );
         cy.contains(
-          "Le lien vers le rapport a bien été copié dans le presse-papier.",
+          "Le lien vers le rapport a bien été copié dans le presse-papier."
         );
       });
     });

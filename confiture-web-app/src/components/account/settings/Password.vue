@@ -107,6 +107,7 @@ async function hideSuccessAlert() {
       required
       autocomplete="current-password"
       show-forgotten-password-link
+      skip-forgotten-password-first-step
     />
 
     <!-- New password -->

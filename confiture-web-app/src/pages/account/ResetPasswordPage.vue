@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import jwtDecode from "jwt-decode";
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import NewPasswordForm from "../../components/account/password-reset/NewPasswordForm.vue";
@@ -8,6 +8,7 @@ import RequestPasswordReset from "../../components/account/password-reset/Reques
 import ResetInstructions from "../../components/account/password-reset/ResetInstructions.vue";
 import PageMeta from "../../components/PageMeta";
 import { useNotifications } from "../../composables/useNotifications";
+import { history } from "../../router";
 import { useAccountStore } from "../../store/account";
 import { PasswordResetVerificationJwtPayload } from "../../types";
 import { captureWithPayloads, formatEmail, isJwtExpired } from "../../utils";
@@ -20,8 +21,10 @@ const verificationTokenIsExpired = computed(
     typeof verificationToken.value === "string" &&
     isJwtExpired(verificationToken.value as string)
 );
-const currentStep = ref(verificationToken.value ? 2 : 0);
 const store = useAccountStore();
+const skipFirstStep =
+  !!history.state["skipFirstStep"] && !!store.account?.email;
+const currentStep = ref(verificationToken.value ? 2 : skipFirstStep ? null : 0);
 const notify = useNotifications();
 
 const resetInstructionsRef = ref<InstanceType<typeof ResetInstructions>>();
@@ -93,6 +96,12 @@ async function resetPassword(newPassword: string) {
     captureWithPayloads(e, false);
   }
 }
+
+onMounted(() => {
+  if (skipFirstStep) {
+    onRequestSubmit(store.account.email);
+  }
+});
 </script>
 
 <template>
